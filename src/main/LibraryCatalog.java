@@ -34,9 +34,11 @@ public class LibraryCatalog {
 		
 	}
 	private List<Book> getBooksFromFiles() throws IOException {
-		try(BufferedReader reader = new BufferedReader(new FileReader("../data/catalog.csv"))){
+		try(BufferedReader reader = new BufferedReader(new FileReader("./data/catalog.csv"))){
 			String line = reader.readLine();
+			line = reader.readLine();
 			while(line != null) {
+				// Skip the first line (header)
 				String[] bookInfo = line.split(",");
 				int id = Integer.parseInt(bookInfo[0]);
 				String title = bookInfo[1];
@@ -50,22 +52,29 @@ public class LibraryCatalog {
 			}
 			return bookCatalog;
 
-		}catch(IOException e) {
+		} catch(IOException e) {
 			throw new IOException("File not found");
 		}
-
 	}
 	
 	private List<User> getUsersFromFiles() throws IOException {
-		try(BufferedReader reader = new BufferedReader(new FileReader("../data/users.csv"))){
+		try(BufferedReader reader = new BufferedReader(new FileReader("./data/user.csv"))){
 			String line = reader.readLine();
+			line = reader.readLine();
 			while(line != null) {
+				// Skip the first line (header)
 				String[] userInfo = line.split(",");
 				int id = Integer.parseInt(userInfo[0]);
 				String name = userInfo[1];
-				User user = new User();
-				user.setId(id);
-				user.setName(name);
+				List<Integer> checkedOutList = new ArrayList<Integer>();
+				if(userInfo.length > 2) {
+					//keep in mind that the list is enclosed by {}
+					String[] checkedOutBooks = userInfo[2].substring(1, userInfo[2].length() - 1).split(" ");
+					for(int i = 0; i < checkedOutBooks.length; i++) {
+						checkedOutList.add(Integer.parseInt(checkedOutBooks[i]));
+					}
+				}
+				User user = new User(id, name, checkedOutList);
 				users.add(user);
 				line = reader.readLine();
 			}
@@ -82,7 +91,7 @@ public class LibraryCatalog {
 		return users;
 	}
 	public void writeBooksToFile(Book bookToBeAdded){
-		try(BufferedWriter writer = new BufferedWriter(new FileWriter("../data/catalog.csv", true))){
+		try(BufferedWriter writer = new BufferedWriter(new FileWriter("./data/catalog.csv", true))){
 			writer.write(bookToBeAdded.getId() + "," + bookToBeAdded.getTitle() + "," + bookToBeAdded.getAuthor() + "," + bookToBeAdded.getGenre() + "," + bookToBeAdded.getLastCheckOut() + "," + bookToBeAdded.isCheckedOut());
 			writer.newLine();
 		}catch(IOException e) {
@@ -96,7 +105,7 @@ public class LibraryCatalog {
 		//call the writeBooksToFile() method to write the book to the catalog file
 		//call the getBooksFromFiles() method to update the book catalog
 		// set last checkout to today's date
-		if(title == null || title.isEmpty() || author == null || author.isEmpty() || genre == null || genre.isEmpty()) {
+	 	if(title == null || title.isEmpty() || author == null || author.isEmpty() || genre == null || genre.isEmpty()) {
 			throw new IllegalArgumentException("None of the following fields can be empty {title, author, genre}");
 		}
 		Book book = new Book(bookCatalog.size(), title, author, genre, null, false);
@@ -104,6 +113,73 @@ public class LibraryCatalog {
 		writeBooksToFile(book);
 		
 	} 
+	public void removeBookFromFile(int id){
+		BufferedReader reader = null;
+		BufferedWriter writer = null;
+		try {
+			File file = new File("./data/catalog.csv");
+			File tempFile = new File("./data/temp.csv");
+			reader = new BufferedReader(new FileReader(file));
+			writer = new BufferedWriter(new FileWriter(tempFile));
+			String currentLine;
+			while((currentLine = reader.readLine()) != null) {
+				String[] bookInfo = currentLine.split(",");
+				int bookId = Integer.parseInt(bookInfo[0]);
+				if(bookId != id) {
+					writer.write(currentLine + System.getProperty("line.separator"));
+				}
+			}
+			reader.close();
+			writer.close();
+			file.delete();
+			tempFile.renameTo(file);
+		}catch(IOException e) {
+			System.out.println("File not found");
+		}
+	}
+	public void shiftBookIdsFromStorage(int removedId){
+		BufferedReader reader = null;
+		BufferedWriter writer = null;
+		try {
+			File file = new File("./data/catalog.csv");
+			File tempFile = new File("./data/temp.csv");
+			reader = new BufferedReader(new FileReader(file));
+			writer = new BufferedWriter(new FileWriter(tempFile));
+			String currentLine;
+			while((currentLine = reader.readLine()) != null) {
+				String[] bookInfo = currentLine.split(",");
+				int bookId = Integer.parseInt(bookInfo[0]);
+				if(bookId > removedId) {
+					bookId--;
+					bookInfo[0] = Integer.toString(bookId);
+					String newLine = String.join(",", bookInfo);
+					writer.write(newLine + System.getProperty("line.separator"));
+				}else {
+					writer.write(currentLine + System.getProperty("line.separator"));
+				}
+			}
+			reader.close();
+			writer.close();
+			file.delete();
+			tempFile.renameTo(file);
+		}catch(IOException e) {
+			System.out.println("File not found");
+		}
+	}
+
+	public void shiftIds(int removedId){
+		for(int i = removedId; i < bookCatalog.size(); i++) {
+			bookCatalog.get(i).setId(bookCatalog.get(i).getId() - 1);
+		}
+		for(int i = 0; i < users.size(); i++){
+			for(int j = 0; j < users.get(i).getCheckedOutList().size(); j++){
+				if(users.get(i).getCheckedOutList().get(j) > removedId){
+					users.get(i).getCheckedOutList().set(j, users.get(i).getCheckedOutList().get(j) - 1);
+				}
+			}
+		}
+		shiftBookIdsFromStorage(removedId);
+	}
 	public void removeBook(int id) {
 		//remove the book from the book catalog
 		//call the writeBooksToFile() method to write the book to the catalog file
@@ -116,7 +192,8 @@ public class LibraryCatalog {
 			throw new IllegalArgumentException("Id is too large for a 32-bit integer");
 		}
 		bookCatalog.remove(id);
-		writeBooksToFile(bookCatalog.get(id));
+		removeBookFromFile(id);
+		shiftIds(id);
 	}	
 	
 	public boolean checkOutBook(int id) {
@@ -175,8 +252,15 @@ public class LibraryCatalog {
 		return bookCount;
 		
 	}
-	//make a method that returns the amount of books in the book catalog per genre using a hashmap
-
+	public int bookCount(String title) {
+		int count = 0;
+		for(int i = 0; i < bookCatalog.size(); i++) {
+			if(bookCatalog.get(i).getTitle().equals(title)) {
+				count++;
+			}
+		}
+		return count;
+	}
 
 
 	public void generateReport() throws IOException {
@@ -222,7 +306,8 @@ public class LibraryCatalog {
 		
 		
 		output += "====================================================\n";
-		output += "\t\t\tTOTAL AMOUNT OF BOOKS\t" (bookCatalog.size()) + "\n\n";
+		output += "\t\t\tTOTAL AMOUNT OF BOOKS\t" + bookCatalog.size() + "\n\n";
+
 		
 		
 		/*
@@ -256,10 +341,28 @@ public class LibraryCatalog {
 				output += users.get(i).getName() + "\t\t\t\t\t$" + totalFees + "\n";
 			} */
 		//}
+		// make a loop that itterates over users and checks if the books in their checked out list are late if so print the user name and the total fees
+		double grandTotal = 0;
+		for (int i = 0; i < users.size(); i++) {
+			double totalFees = 0;
+			for (int j = 0; j < bookCatalog.size(); j++) {
+				if(users.get(i).getCheckedOutList() != null) {
+					continue;
+				}
+				if (users.get(i).getCheckedOutList().contains(bookCatalog.get(j).getId())) {
 
+					totalFees += bookCatalog.get(j).calculateFees();
+				}
+			}
+			if (totalFees > 0) {
+				output += users.get(i).getName() + "\t\t\t\t\t$" + totalFees + "\n";
+			}
+			grandTotal += totalFees;
+		}
+		
 			
 		output += "====================================================\n";
-		output += "\t\t\t\tTOTAL DUE\t$" + (/*Place here the total amount of money owed to the library.*/) + "\n\n\n";
+		output += "\t\t\t\tTOTAL DUE\t$" + (grandTotal) + "\n\n\n";
 		output += "\n\n";
 		System.out.println(output);// You can use this for testing to see if the report is as expected.
 		
@@ -270,6 +373,11 @@ public class LibraryCatalog {
 		 * 
 		 * PLACE CODE HERE!!
 		 */
+		try(BufferedWriter writer = new BufferedWriter(new FileWriter("./report/report.txt"))){
+			writer.write(output);
+		}catch(IOException e) {
+			System.out.println("File not found");
+		}
 		
 	}
 	

@@ -5,11 +5,17 @@ import interfaces.List;
 public class User {
 	private int id;
 	private String name; 
-	private List<Book> checkedOutList;
+	private List<Integer> checkedOutList;
 	public int getId() {
 		return this.id;
 	}
 
+
+	public User(int id, String name, List<Integer> checkedOutList) {
+		this.setId(id);
+		this.setName(name);
+		this.setCheckedOutList(checkedOutList);
+	}
 	public void setId(int id) {
 		//check that id is a positive number
 		if (id < 0) {
@@ -36,11 +42,11 @@ public class User {
 		this.name = name.trim(); // remove leading and trailing whitespace
 	}
 
-	public List<Book> getCheckedOutList() {
+	public List<Integer> getCheckedOutList() {
 		return this.checkedOutList;
 	}
 
-	public void setCheckedOutList(List<Book> checkedOutList) {
+	public void setCheckedOutList(List<Integer> checkedOutList) {
 		this.checkedOutList = checkedOutList;
 	}
 	

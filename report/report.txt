@@ -1,0 +1,27 @@
+				REPORT
+
+		SUMMARY OF BOOKS
+GENRE						AMOUNT
+Adventure					12
+Fiction						11
+Classics					12
+Mystery						8
+Science Fiction					null
+====================================================
+			TOTAL AMOUNT OF BOOKS	50
+
+			BOOKS CURRENTLY CHECKED OUT
+
+====================================================
+			TOTAL AMOUNT OF BOOKS	50
+
+
+
+		USERS THAT OWE BOOK FEES
+
+====================================================
+				TOTAL DUE	$0.0
+
+
+
+
