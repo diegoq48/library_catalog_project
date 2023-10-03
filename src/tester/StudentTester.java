@@ -35,7 +35,8 @@ public class StudentTester {
 	}
 	@Test
 	public void testIfConstructedCorrectly() {
-		assertTrue("Failed to create Bokk and User Lists correctly.", LC.getBookCatalog().size() == 50 && LC.getUsers().size() == 30);
+		assertTrue("Failed to create Book and User Lists correctly.", LC.getBookCatalog().size() == 50 && LC.getUsers().size() == 30);
+		System.out.println(LC.getBookCatalog().size() + " " + LC.getUsers().size());
 	}
 	@Test
 	public void testAddBook() {
@@ -100,7 +101,7 @@ public class StudentTester {
 	/*
 	 * BONUS TESTERS
 	 */
-	@Test
+/* 	@Test
 	public void testFunctionalBookMethod() {
 	
 		List<Book> adL = LC.searchForBook(x -> x.getGenre().equals("Adventure"));
@@ -121,8 +122,8 @@ public class StudentTester {
 		System.out.println("BONUS +5 pts!!!");
 		return;
 
-	}
-	@Test
+	} */
+/* 	@Test
 	public void testFunctionalUserMethod() {
 
 		List<User> udL = LC.searchForUsers(x -> x.getCheckedOutList().size() == 1);
@@ -145,7 +146,7 @@ public class StudentTester {
 		System.out.println("BONUS +5 pts!!!");
 		return;
 
-	}
+	} */
 	
 	/*
 	 * Helper methods

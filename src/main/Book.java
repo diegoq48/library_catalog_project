@@ -1,6 +1,7 @@
 package main;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Book {
 	private int id;	
@@ -65,14 +66,18 @@ public class Book {
 		 * 
 		 * Both the title and author are in uppercase.
 		 */
-		return this.getTitle().toUpperCase() + "By" + this.getAuthor().toUpperCase();
+		return this.getTitle().toUpperCase() + " BY " + this.getAuthor().toUpperCase();
 	}
 	public double calculateFees() {
 		double baseFee = 10.00;
 		double feePerDay = 1.50;
-		int daysLate = LocalDate.now().compareTo(this.getLastCheckOut());
-		if (daysLate > 30) {
-			return (float) (baseFee + (daysLate * feePerDay));
+		//make the comparison date be september 15th, 2023
+		LocalDate september15th = LocalDate.of(2023, 9, 15);
+		long daysLate = ChronoUnit.DAYS.between(this.getLastCheckOut(), september15th);
+		int daysLateInt = (int) daysLate;
+
+		if (daysLateInt > 31) {
+			return (double) (baseFee + ((daysLate-31) * feePerDay));
 		}
 		return 0.0;
 	}

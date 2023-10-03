@@ -335,6 +335,12 @@ public class ArrayList<E> implements List<E>{
 		str = str + " }";
 		return str;
 	}
+	public int sum() {
+		int sum = 0;
+		for(int i = 0; i < this.size(); i++)
+			sum += (int) this.elements[i];
+		return sum;
+	}
 	
 	/**
 	 * Method that prints the content of the List after it was modified by applying a function F.

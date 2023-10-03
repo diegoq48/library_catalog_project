@@ -12,8 +12,22 @@ public class TestMain {
 		// TODO Auto-generated method stub
 		try {
 			LibraryCatalog lc = new LibraryCatalog();
-				
-			lc.generateReport();
+			System.out.println(lc.getUsers().size() + " " + lc.getBookCatalog().size());
+			lc.addBook("My Personal Biography", "G Bonilla", "Classics");
+			lc.addBook("Coder's Guide to Failing", "G Bonilla", "Adventure");
+			// print the all the id of the books in the lc 
+			lc.removeBook(16);
+			System.out.println(lc.getBookCatalog().get(35).getId());
+			System.out.println(lc.getBookCatalog().get(35).calculateFees());
+			
+			// test that the book was actually removed 
+			// print the all the id of the books in the lc
+
+
+			for(Book b : lc.getBookCatalog()) {
+				System.out.println(b.getId());
+			}
+			//lc.generateReport();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
