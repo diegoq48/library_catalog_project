@@ -24,8 +24,10 @@ public class TestMain {
 			// print the all the id of the books in the lc
 
 
-			for(Book b : lc.getBookCatalog()) {
-				System.out.println(b.getId());
+			for(User b : lc.getUsers()) {
+				if(b.getCheckedOutList().size() > 0){
+				System.out.println(b.getCheckedOutList().size());
+				}
 			}
 			//lc.generateReport();
 		} catch (IOException e) {

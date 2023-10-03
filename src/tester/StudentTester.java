@@ -101,7 +101,7 @@ public class StudentTester {
 	/*
 	 * BONUS TESTERS
 	 */
-/* 	@Test
+	@Test
 	public void testFunctionalBookMethod() {
 	
 		List<Book> adL = LC.searchForBook(x -> x.getGenre().equals("Adventure"));
@@ -122,8 +122,8 @@ public class StudentTester {
 		System.out.println("BONUS +5 pts!!!");
 		return;
 
-	} */
-/* 	@Test
+	}
+	@Test
 	public void testFunctionalUserMethod() {
 
 		List<User> udL = LC.searchForUsers(x -> x.getCheckedOutList().size() == 1);
@@ -146,7 +146,7 @@ public class StudentTester {
 		System.out.println("BONUS +5 pts!!!");
 		return;
 
-	} */
+	}
 	
 	/*
 	 * Helper methods

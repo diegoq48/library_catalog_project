@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -442,11 +443,23 @@ public class LibraryCatalog {
 	 * other parts of the project.
 	 */
 	public List<Book> searchForBook(FilterFunction<Book> func) {
-		return null;
+		ArrayList<Book> filteredBooks = new ArrayList<Book>();
+		for(int i = 0; i < bookCatalog.size(); i++) {
+			if(func.filter(bookCatalog.get(i))){
+				filteredBooks.add(bookCatalog.get(i));
+			}
+		}
+		return filteredBooks;
 	}
 	
 	public List<User> searchForUsers(FilterFunction<User> func) {
-		return null;
+		ArrayList<User> filteredUsers = new ArrayList<User>();
+		for(int i = 0; i < users.size(); i++) {
+			if(func.filter(users.get(i))) {
+				filteredUsers.add(users.get(i));
+			}
+		}
+		return filteredUsers;
 	}
 	
 }
