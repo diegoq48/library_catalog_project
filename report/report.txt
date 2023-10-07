@@ -44,19 +44,20 @@ THE LITTLE PRINCE by ANTOINE DE SAINT-EXUPURY
 
 		USERS THAT OWE BOOK FEES
 
-John Smith					$1422.0
-Michael Johnson					$804.5
-Susan Jones					$320.5
-Sarah Wilson					$1061.0
-James Anderson					$149.5
-Karen Lee					$988.5
-Charles Martin					$1398.0
-Joseph Clark					$1165.5
-John Wright					$987.0
-Karen Turner					$559.0
-Kimberly Baker					$104.5
+John Smith					$1282.5
+Michael Johnson					$711.5
+Susan Jones					$274.0
+Sarah Wilson					$968.0
+James Anderson					$103.0
+Karen Lee					$849.0
+Charles Martin					$1258.5
+Joseph Clark					$1026.0
+John Wright					$837.5
+Karen Turner					$512.5
+Daniel Young					$389.5
+Kimberly Baker					$58.0
 ====================================================
-				TOTAL DUE	$8960.0
+				TOTAL DUE	$8270.0
 
 
 
