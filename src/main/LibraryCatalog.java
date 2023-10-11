@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
+import java.util.Scanner;
+
 import data_structures.ArrayList;
 import interfaces.FilterFunction;
 import interfaces.List;
@@ -332,6 +334,21 @@ public class LibraryCatalog {
 		return !bookCatalog.get(id-1).isCheckedOut();
 	}
 
+	public String getReport(){
+		//open the report file and read it into a string
+		String report = "";
+		try(BufferedReader reader = new BufferedReader(new FileReader("./report/report.txt"))){
+			String line = reader.readLine();
+			while(line != null){
+				report += line + "\n";
+				line = reader.readLine();
+			}
+		}catch(IOException e){
+			System.out.println("File not found");
+		}
+		return report;
+	}
+
 	/**
 	 * Counts the number of books in each genre and returns the result as a HashMap.
 	 *
@@ -489,6 +506,31 @@ public class LibraryCatalog {
 
 		return filteredUsers;
 	}
+
+	 
+	/**
+	 * Searches for books in the library catalog by title.
+	 *
+	 * This method prompts the user to enter a search term and searches for books in the library catalog
+	 * that contain the search term in their title. If any matching books are found, they are printed to the console.
+	 * If no matching books are found, a message is printed to the console indicating that no books were found.
+	 *
+	 * This method is intended to be used in an interactive setting, such as a command-line interface (CLI).
+	 * It uses the standard input and output streams to interact with the user.
+	 */
+	public ArrayList<Book> searchForBook(String searchTerm) {
+
+        ArrayList<Book> matchingBooks = new ArrayList<>();
+
+        for (Book book : bookCatalog) {
+            String title = book.getTitle().toLowerCase();
+            if (title.contains(searchTerm)) {
+                matchingBooks.add(book);
+            }
+        }
+		return matchingBooks;
+        
+    }
 
 	
 }

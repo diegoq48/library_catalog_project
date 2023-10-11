@@ -112,16 +112,14 @@ public class Book {
      *
      * @return The calculated late fee for the book.
      */
-    public double calculateFees() {
-        double baseFee = 10.00;
-        double feePerDay = 1.50;
-        LocalDate september15th = LocalDate.of(2023, 9, 15);
-        long daysLate = ChronoUnit.DAYS.between(this.getLastCheckOut(), september15th);
-        int daysLateInt = (int) daysLate;
-
-        if (daysLateInt > 31) {
-            return (double) (baseFee + ((daysLate - 31) * feePerDay));
-        }
-        return 0.0;
+    public float calculateFees() {
+        long daysSince = ChronoUnit.DAYS.between(lastCheckOut, LocalDate.of(2023, 9, 15));
+        if (daysSince <= 30) {
+            return 0;  
+        } 
+        float baseFee = 10.0f;
+        float extraBilling = (daysSince - 31.0f) * 1.5f;
+        return baseFee + extraBilling;
+        
     }
 }

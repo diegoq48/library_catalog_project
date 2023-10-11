@@ -52,12 +52,12 @@ James Anderson					$103.0
 Karen Lee					$849.0
 Charles Martin					$1258.5
 Joseph Clark					$1026.0
-John Wright					$837.5
+John Wright					$847.5
 Karen Turner					$512.5
 Daniel Young					$389.5
 Kimberly Baker					$58.0
 ====================================================
-				TOTAL DUE	$8270.0
+				TOTAL DUE	$8280.0
 
 
 
